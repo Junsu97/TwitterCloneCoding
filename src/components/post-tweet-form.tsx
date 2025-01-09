@@ -3,6 +3,7 @@ import {useState} from "react";
 import * as React from "react";
 import {addDoc, collection} from "firebase/firestore";
 import {auth, database} from "../firebase.ts";
+import {handleFileChange} from "../util/util.ts";
 
 const Form = styled.form`
     display: flex;
@@ -68,14 +69,9 @@ export default function PostTweetForm() {
     };
     // base64 인코딩
     const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {files} = e.target;
-        if (files && files.length === 1) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFile(reader.result as string);
-            };
-            reader.readAsDataURL(files[0]);
-        }
+        handleFileChange(e, (fileData) => {
+            setFile(fileData);
+        })
     }
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
